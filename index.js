@@ -11,7 +11,10 @@ var GLContextWrapper = require('./wrapper');
  * @return {Object|kami.WebGLContext} a wrapper that has a `gl` property
  */
 module.exports.wrapContext = function(gl) {
-    if (typeof window.WebGLRenderingContext !== "undefined" && gl instanceof window.WebGLRenderingContext) {
+    //Chrome's WebGLInspector wraps it with a different class
+    //and then puts the original in 'rawgl' property
+    var rawgl = gl && gl.rawgl ? gl.rawgl : gl;
+    if (typeof window.WebGLRenderingContext !== "undefined" && rawgl instanceof window.WebGLRenderingContext) {
         return new GLContextWrapper(gl);
     } else
         return gl;
